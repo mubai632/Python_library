@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import sys
 
 from PyQt5.QtWidgets import *
 from Main_interface import *

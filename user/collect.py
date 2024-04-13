@@ -1,22 +1,29 @@
 # -*- coding:utf-8 -*-
-# 推荐书籍
+# 收藏书籍
+
 from PyQt5 import uic
 from PyQt5.QtWidgets import *
 
 
-class RecommendedBooks(QMainWindow):
+class collect(QMainWindow):
     # def __init__(self):
     #     super().__init__()
-    #     self.ui = uic.loadUi('./ui_user/Recommended_books.ui')
+    #     self.ui = uic.loadUi('./ui_user/collect.ui')
 
     def __init__(self):
         super().__init__()
-        self.ui = uic.loadUi('./ui_user/Recommended_books_Null.ui')
+        self.ui = uic.loadUi('./ui_user/collect_Null.ui')
+        self.ui.tuijian_button.clicked.connect(self.OpenRecommended_books)
         self.ui.book_button.clicked.connect(self.OpenBookstore)
-        self.ui.collect.clicked.connect(self.Opencollect)
         self.ui.reserve.clicked.connect(self.Openreserve)
         self.ui.report_loss.clicked.connect(self.OpenReportLoss)
         self.ui.personal_information.clicked.connect(self.OpenPersonalInformation)
+
+    def OpenRecommended_books(self):
+        from user.Recommended_books import RecommendedBooks
+        self.RecommendedBooks = RecommendedBooks()
+        self.RecommendedBooks.ui.show()
+        self.ui.close()
 
     def OpenBookstore(self):
         from user.Bookstore import Bookstore
@@ -24,11 +31,6 @@ class RecommendedBooks(QMainWindow):
         self.Bookstore.ui.show()
         self.ui.close()
 
-    def Opencollect(self):
-        from user.collect import collect
-        self.collect = collect()
-        self.collect.ui.show()
-        self.ui.close()
 
     def Openreserve(self):
         from user.reserve import reserve
@@ -47,4 +49,3 @@ class RecommendedBooks(QMainWindow):
         self.PersonalInformation = PersonalInformation()
         self.PersonalInformation.ui.show()
         self.ui.close()
-

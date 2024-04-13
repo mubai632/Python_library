@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>图书管理系统</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0,1,1,1,1,1">
+  <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0,1,1,0,1,1">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
@@ -139,28 +139,28 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QLineEdit" name="lineEdit">
+        <widget class="QLineEdit" name="id">
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_2">
+        <widget class="QLineEdit" name="password_1">
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_3">
+        <widget class="QLineEdit" name="password_2">
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_4">
+        <widget class="QLineEdit" name="email_1">
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
@@ -229,7 +229,7 @@
     </spacer>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="2,3,2">
+    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="2,0,1,0,2">
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
@@ -244,9 +244,29 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="register_2">
        <property name="text">
         <string>注册</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_5">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="clean">
+       <property name="text">
+        <string>重置</string>
        </property>
       </widget>
      </item>

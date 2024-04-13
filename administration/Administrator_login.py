@@ -7,3 +7,11 @@ class AdministratorLogin(QMainWindow):
     def __init__(self):
         super().__init__()
         self.ui = uic.loadUi('./ui_administrator/administrator_interface.ui')
+        self.ui.user_button.clicked.connect(self.login)
+
+    def login(self):
+        from administration.Borrow import Borrow
+        self.Borrow = Borrow()
+        self.Borrow.ui.show()
+        self.ui.close()
+

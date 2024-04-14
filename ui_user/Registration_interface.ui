@@ -58,7 +58,7 @@
     </spacer>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,2,6,1,1">
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0,0,1,0">
      <item>
       <spacer name="horizontalSpacer_3">
        <property name="orientation">
@@ -143,17 +143,29 @@
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
+         <property name="placeholderText">
+          <string>请输入11位学号/工号!</string>
+         </property>
         </widget>
        </item>
        <item>
         <widget class="QLineEdit" name="password_1">
+         <property name="echoMode">
+          <enum>QLineEdit::Password</enum>
+         </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
+         </property>
+         <property name="placeholderText">
+          <string>密码大于2位!!!</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLineEdit" name="password_2">
+         <property name="echoMode">
+          <enum>QLineEdit::Password</enum>
+         </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
@@ -192,7 +204,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_7">
+        <widget class="QLabel" name="email_2">
          <property name="text">
           <string/>
          </property>

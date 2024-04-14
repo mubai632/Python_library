@@ -14,7 +14,7 @@ class UserLoginWindows(QMainWindow):
         self.ui.register_2.clicked.connect(self.OpenRegistrationInterface)
         self.ui.user_button.clicked.connect(self.OpenRecommended_books)
 
-
+    # 定义按钮点击事件
     def OpenRegistrationInterface(self):
         self.RegistrationInterface = RegistrationInterface()
         self.RegistrationInterface.ui.show()

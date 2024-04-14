@@ -12,9 +12,9 @@ class ReportLoss(QMainWindow):
         self.ui.book_button.clicked.connect(self.OpenBookstore)
         self.ui.collect.clicked.connect(self.Opencollect)
         self.ui.reserve.clicked.connect(self.Openreserve)
-        # self.ui.report_loss.clicked.connect(self.OpenReportLoss)
         self.ui.personal_information.clicked.connect(self.OpenPersonalInformation)
 
+    # 定义按钮点击事件
     def OpenRecommended_books(self):
         from user.Recommended_books import RecommendedBooks
         self.RecommendedBooks = RecommendedBooks()
@@ -39,11 +39,6 @@ class ReportLoss(QMainWindow):
         self.reserve.ui.show()
         self.ui.close()
 
-    # def OpenReportLoss(self):
-    #     from user.Report_loss import ReportLoss
-    #     self.ReportLoss = ReportLoss()
-    #     self.ReportLoss.ui.show()
-    #     self.ui.close()
 
     def OpenPersonalInformation(self):
         from user.personal_information import PersonalInformation

@@ -115,10 +115,16 @@
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
+           <property name="placeholderText">
+            <string>请输入11位学号/工号!</string>
+           </property>
           </widget>
          </item>
          <item>
           <widget class="QLineEdit" name="lineEdit">
+           <property name="echoMode">
+            <enum>QLineEdit::Password</enum>
+           </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>

@@ -14,6 +14,7 @@ class Borrow(QMainWindow):
         self.ui.user_info.clicked.connect(self.OpenUserInfo)
         self.ui.setting.clicked.connect(self.OpenSetting)
 
+    # 定义按钮点击事件
     def OpenReturn(self):
         from administration.Return import Return
         self.Return = Return()

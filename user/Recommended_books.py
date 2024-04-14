@@ -18,6 +18,7 @@ class RecommendedBooks(QMainWindow):
         self.ui.report_loss.clicked.connect(self.OpenReportLoss)
         self.ui.personal_information.clicked.connect(self.OpenPersonalInformation)
 
+    # 定义按钮点击事件
     def OpenBookstore(self):
         from user.Bookstore import Bookstore
         self.Bookstore = Bookstore()

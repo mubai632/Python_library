@@ -14,6 +14,7 @@ class PersonalInformation(QMainWindow):
         self.ui.reserve.clicked.connect(self.Openreserve)
         self.ui.report_loss.clicked.connect(self.OpenReportLoss)
 
+    # 定义按钮点击事件
     def OpenRecommended_books(self):
         from user.Recommended_books import RecommendedBooks
         self.RecommendedBooks = RecommendedBooks()

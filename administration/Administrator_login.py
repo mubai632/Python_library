@@ -9,6 +9,7 @@ class AdministratorLogin(QMainWindow):
         self.ui = uic.loadUi('./ui_administrator/administrator_interface.ui')
         self.ui.user_button.clicked.connect(self.login)
 
+    # 定义按钮点击事件
     def login(self):
         from administration.Borrow import Borrow
         self.Borrow = Borrow()

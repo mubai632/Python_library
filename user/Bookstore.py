@@ -14,12 +14,12 @@ class Bookstore(QMainWindow):
         self.ui.report_loss.clicked.connect(self.OpenReportLoss)
         self.ui.personal_information.clicked.connect(self.OpenPersonalInformation)
 
+    # 定义按钮点击事件
     def OpenRecommended_books(self):
         from user.Recommended_books import RecommendedBooks
         self.RecommendedBooks = RecommendedBooks()
         self.RecommendedBooks.ui.show()
         self.ui.close()
-
 
     def Opencollect(self):
         from user.collect import collect

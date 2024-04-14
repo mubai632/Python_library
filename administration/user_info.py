@@ -14,6 +14,7 @@ class UserInfo(QMainWindow):
         self.ui.reserve.clicked.connect(self.OpenReserve)
         self.ui.setting.clicked.connect(self.OpenSetting)
 
+    # 定义按钮点击事件
     def OpenBorrow(self):
         from administration.Borrow import Borrow
         self.Borrow = Borrow()

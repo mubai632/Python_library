@@ -11,6 +11,7 @@ class MainWindow(QMainWindow):  # 创建一个MainWindows主窗口类
         self.ui.user_button.clicked.connect(self.OpenUserLogin)
         self.ui.gl_button.clicked.connect(self.OpenAdministrator)
 
+    # 定义按钮点击事件
     def OpenUserLogin(self):    # 用户登录界面调用
         self.UserLogin = UserLoginWindows()     # 创建实例; 将UserLoginWindows类赋给当前实例的UserLogin属性
         self.UserLogin.ui.show()    # 调用实例的ui属性调用show方法, 显示界面

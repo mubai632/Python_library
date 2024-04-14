@@ -13,8 +13,8 @@ class Setting(QMainWindow):
         self.ui.book_information.clicked.connect(self.OpenBookInformation)
         self.ui.reserve.clicked.connect(self.OpenReserve)
         self.ui.user_info.clicked.connect(self.OpenUserInfo)
-        # self.ui.setting.clicked.connect(self.OpenSetting)
 
+    # 定义按钮点击事件
     def OpenBorrow(self):
         from administration.Borrow import Borrow
         self.Borrow = Borrow()
@@ -44,10 +44,4 @@ class Setting(QMainWindow):
         self.UserInfo = UserInfo()
         self.UserInfo.ui.show()
         self.ui.close()
-
-    # def OpenSetting(self):
-    #     from administration.setting import Setting
-    #     self.Setting = Setting()
-    #     self.Setting.ui.show()
-    #     self.ui.close()
 

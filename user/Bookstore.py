@@ -1,9 +1,41 @@
 # -*- coding:utf-8 -*-
 # 书城
 from PyQt5 import uic
+from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
-
 from mysql import OpenMySql
+
+
+class SearchThread1(QThread):
+    # 根据搜索框进行搜索
+    search_finished = pyqtSignal(object)  # 定义一个信号，在搜索完成时发射
+
+    def __init__(self, db, cursor):
+        super().__init__()
+        self.db = db
+        self.cursor = cursor
+
+    def run(self):
+        # 查询数据库获取数据
+        self.cursor.execute("SELECT * FROM student_information")
+        data = self.cursor.fetchall()
+        self.search_finished.emit(data)  # 发射信号，传递数据
+
+
+class SearchThread2(QThread):
+    # 根据combobox进行搜索
+    search_finished = pyqtSignal(object)  # 定义一个信号，在搜索完成时发射
+
+    def __init__(self, db, cursor):
+        super().__init__()
+        self.db = db
+        self.cursor = cursor
+
+    def run(self):
+        # 查询数据库获取数据
+        self.cursor.execute("SELECT * FROM student_information")
+        data = self.cursor.fetchall()
+        self.search_finished.emit(data)  # 发射信号，传递数据
 
 
 class Bookstore(QMainWindow):
@@ -102,10 +134,10 @@ class Bookstore(QMainWindow):
     def ComboBoxSearch(self):
         # 通过combobox进行搜索
         self.db = OpenMySql.open_connection()
+        self.cursor = self.db.cursor()
 
         # 清除所有子部件
         layout = self.ui.scrollAreaWidgetContents_2.layout()
-        # 删除布局中的所有子部件
         while layout.count():
             child = layout.takeAt(0)
             if child.widget():
@@ -113,11 +145,15 @@ class Bookstore(QMainWindow):
 
         # 创建表格部件
         self.table_widget = QTableWidget()
-        self.ui.scrollAreaWidgetContents_2(self.table_widget)
+        layout.addWidget(self.table_widget)  # 添加表格到布局中
+
         # 设置表格的列数
         self.table_widget.setColumnCount(5)  # 有5列
 
-        self.db.close()
+        # 创建并启动线程执行查询
+        self.search_thread = SearchThread2(self.db, self.cursor)
+        self.search_thread.search_finished.connect(self.add_data_to_table)  # 连接信号到槽函数
+        self.search_thread.start()
 
     def LineEditSearch(self):
         self.db = OpenMySql.open_connection()
@@ -137,10 +173,12 @@ class Bookstore(QMainWindow):
         # 设置表格的列数
         self.table_widget.setColumnCount(5)  # 有5列
 
-        # 查询数据库获取数据
-        self.cursor.execute("SELECT * FROM student_information")
-        data = self.cursor.fetchall()
+        # 创建并启动线程执行查询
+        self.search_thread = SearchThread1(self.db, self.cursor)
+        self.search_thread.search_finished.connect(self.add_data_to_table)  # 连接信号到槽函数
+        self.search_thread.start()
 
+    def add_data_to_table(self, data):
         # 将数据添加到表格中
         for row_data in data:
             self.add_row_to_table(row_data)

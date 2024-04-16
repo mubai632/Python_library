@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>图书管理系统</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0,3,1">
+  <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0,0,0,1">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
@@ -155,7 +155,7 @@
            <x>0</x>
            <y>0</y>
            <width>434</width>
-           <height>211</height>
+           <height>185</height>
           </rect>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0">
@@ -211,7 +211,7 @@
             <item>
              <widget class="QLabel" name="label_4">
               <property name="text">
-               <string>性别:</string>
+               <string>邮箱:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -221,7 +221,7 @@
             <item>
              <widget class="QLabel" name="label_7">
               <property name="text">
-               <string>邮箱:</string>
+               <string>性别:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -253,42 +253,42 @@
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_3">
             <item>
-             <widget class="QLineEdit" name="lineEdit">
+             <widget class="QLineEdit" name="lineEdit_id">
               <property name="enabled">
                <bool>false</bool>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_2">
+             <widget class="QLineEdit" name="lineEdit_name">
               <property name="enabled">
                <bool>false</bool>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_3">
+             <widget class="QLineEdit" name="lineEdit_email">
               <property name="enabled">
                <bool>false</bool>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_14">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="lineEdit_13">
+             <widget class="QLineEdit" name="lineEdit_gender">
               <property name="enabled">
                <bool>true</bool>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_4">
+             <widget class="QLineEdit" name="lineEdit_major">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="lineEdit_phone_number">
               <property name="enabled">
                <bool>true</bool>
               </property>
@@ -315,6 +315,43 @@
       </item>
      </layout>
     </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,0,1">
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>提交</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
    </item>
    <item>
     <spacer name="verticalSpacer_2">

@@ -3,6 +3,8 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import *
 
+from mysql import OpenMySql
+
 
 class Bookstore(QMainWindow):
     def __init__(self):
@@ -13,6 +15,12 @@ class Bookstore(QMainWindow):
         self.ui.reserve.clicked.connect(self.Openreserve)
         self.ui.report_loss.clicked.connect(self.OpenReportLoss)
         self.ui.personal_information.clicked.connect(self.OpenPersonalInformation)
+        self.ui.pushButton_1.clicked.connect(self.ComboBoxSearch)
+        self.ui.pushButton_2.clicked.connect(self.LineEditSearch)
+
+        self.ui.comboBox.currentIndexChanged.connect(self.updateComboBox2)
+
+
 
     # 定义按钮点击事件
     def OpenRecommended_books(self):
@@ -44,4 +52,111 @@ class Bookstore(QMainWindow):
         self.PersonalInformation = PersonalInformation()
         self.PersonalInformation.ui.show()
         self.ui.close()
+
+    # 定义第一个ComboBox的索引更改事件处理函数
+    def updateComboBox2(self, index):
+        # 清除第二个ComboBox中的所有项
+        self.ui.comboBox_2.clear()
+
+        # 根据第一个ComboBox的索引确定要显示的内容
+        if index == 0:  # 假设第一个ComboBox中的索引从0开始
+            items = ["文学小说", "艺术与设计", "语言与文学", "电影与媒体"]  # 根据索引0显示的内容
+        elif index == 1:
+            items = ["历史与地理",]  # 根据索引1显示的内容
+        elif index == 2:
+            items = ["社会科学", "商业与管理", "法律与政治"]  # 根据索引2显示的内容
+        elif index == 3:
+            items = ["自然科学", "科普读物",]  # 根据索引3显示的内容
+        elif index == 4:
+            items = ["技术与工程",]  # 根据索引4显示的内容
+        elif index == 5:
+            items = ["健康与心理",]  # 根据索引5显示的内容
+        elif index == 6:
+            items = ["教育与教材",]  # 根据索引6显示的内容
+        elif index == 7:
+            items = ["宗教与哲学",]  # 根据索引7显示的内容
+        elif index == 8:
+            items = ["参考资料与工具书",]  # 根据索引8显示的内容
+        elif index == 9:
+            items = ["医学与健康",]  # 根据索引9显示的内容
+        elif index == 10:
+            items = ["农业与环境",]  # 根据索引10显示的内容
+        elif index == 11:
+            items = ["科学与技术",]  # 根据索引11显示的内容
+        elif index == 12:
+            items = ["旅行与地理",]  # 根据索引12显示的内容
+        elif index == 13:
+            items = ["食品与饮食",]  # 根据索引13显示的内容
+        elif index == 14:
+            items = ["体育与运动",]  # 根据索引14显示的内容
+        elif index == 15:
+            items = ["家庭与生活",]  # 根据索引15显示的内容
+        elif index == 16:
+            items = ["心灵与成长",]  # 根据索引16显示的内容
+        else:
+            items = []  # 如果索引不匹配任何条件，则显示空内容
+
+        # 将新的内容添加到第二个ComboBox中
+        self.ui.comboBox_2.addItems(items)
+
+    def ComboBoxSearch(self):
+        # 通过combobox进行搜索
+        self.db = OpenMySql.open_connection()
+
+        # 清除所有子部件
+        layout = self.ui.scrollAreaWidgetContents_2.layout()
+        # 删除布局中的所有子部件
+        while layout.count():
+            child = layout.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater()
+
+        # 创建表格部件
+        self.table_widget = QTableWidget()
+        self.ui.scrollAreaWidgetContents_2(self.table_widget)
+        # 设置表格的列数
+        self.table_widget.setColumnCount(5)  # 有5列
+
+        self.db.close()
+
+    def LineEditSearch(self):
+        self.db = OpenMySql.open_connection()
+        self.cursor = self.db.cursor()
+
+        # 清除所有子部件
+        layout = self.ui.scrollAreaWidgetContents_2.layout()
+        while layout.count():
+            child = layout.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater()
+
+        # 创建表格部件
+        self.table_widget = QTableWidget()
+        layout.addWidget(self.table_widget)  # 添加表格到布局中
+
+        # 设置表格的列数
+        self.table_widget.setColumnCount(5)  # 有5列
+
+        # 查询数据库获取数据
+        self.cursor.execute("SELECT * FROM student_information")
+        data = self.cursor.fetchall()
+
+        # 将数据添加到表格中
+        for row_data in data:
+            self.add_row_to_table(row_data)
+
+        # 关闭数据库连接
+        self.db.close()
+
+    def add_row_to_table(self, row_data):
+        # 获取表格的当前行数
+        current_row = self.table_widget.rowCount()
+
+        # 插入新的一行
+        self.table_widget.insertRow(current_row)
+
+        # 在新行中添加数据
+        for col_num, cell_data in enumerate(row_data):
+            item = QTableWidgetItem(str(cell_data))
+            self.table_widget.setItem(current_row, col_num, item)
 

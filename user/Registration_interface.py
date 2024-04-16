@@ -33,49 +33,62 @@ class RegistrationInterface(QMainWindow):
                 id_to_check = self.ui.id.text().strip()
                 cursor.execute("SELECT id FROM student_account WHERE id = %s", (id_to_check,))
                 result = cursor.fetchone()
+                cursor.close()
 
                 if result:
                     # 如果 ID 已存在，则显示提示对话框并返回
                     QMessageBox.warning(self, '提示', '账号已存在，请重新输入！')
                     return
 
-                if (self.ui.password_1.text().strip() == self.ui.password_2.text().strip() is not None):
-                    if ((self.ui.id.text().strip() == 11) and (self.ui.id.text().strip() is not None)):
-                        if ((re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', self.ui.email_1.text().strip())) and (self.ui.email_1.text().strip())is not None):
-                            # 执行 SQL 查询命令
-                            sql = "INSERT INTO student_account (id, password, email) VALUES (%s, %s, %s)"
-                            value1 = self.ui.id.text().strip()
-                            value2 = self.ui.password_1.text().strip()
-                            value3 = self.ui.email_1.text().strip()
-                            value = (value1,value2,value3)
-                            cursor.execute(sql, value)
+                # 创建新的游标对象
+                cursor = self.db.cursor()
 
-                            # 提交数据库执行
-                            self.db.commit()
+                # 创建查询语句
+                # 检查要插入的 ID 是否在学校人员表中存在
+                id_to_check = self.ui.id.text().strip()
+                cursor.execute("SELECT id FROM student_information WHERE id = %s", (id_to_check,))
+                result = cursor.fetchone()
+                if result is not None:
+                    try:
+                        if (self.ui.password_1.text().strip() == self.ui.password_2.text().strip() is not None):
+                            if (len(self.ui.id.text().strip()) == 11):
+                                if ((re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', self.ui.email_1.text().strip())) and (self.ui.email_1.text().strip())is not None):
+                                    # 执行 SQL 查询命令
+                                    sql = "INSERT INTO student_account (id, password, email) VALUES (%s, %s, %s)"
+                                    value1 = self.ui.id.text().strip()
+                                    value2 = self.ui.password_1.text().strip()
+                                    value3 = self.ui.email_1.text().strip()
+                                    value = (value1,value2,value3)
+                                    cursor.execute(sql, value)
 
-                            # 关闭游标和数据库连接
-                            cursor.close()
-                            self.db.close()
-                            from user.User_interface import UserLoginWindows  # 因为循环打入的问题使用函数导入模块
-                            registration_dialog = QMessageBox(self)
-                            registration_dialog.setWindowTitle('提示...')
-                            registration_dialog.setText('注册成功!!!')
-                            registration_dialog.addButton('去登录...', QMessageBox.AcceptRole)
-                            registration_dialog.accepted.connect(self.goToLogin)  # 连接accepted信号到goToLogin槽函数
-                            registration_dialog.exec_()
-                            self.UserLogin = UserLoginWindows()
-                            self.UserLogin.ui.show()
-                            self.ui.close()
+                                    # 提交数据库执行
+                                    self.db.commit()
+
+                                    # 关闭游标和数据库连接
+                                    cursor.close()
+                                    self.db.close()
+                                    from user.User_interface import UserLoginWindows  # 因为循环打入的问题使用函数导入模块
+                                    registration_dialog = QMessageBox(self)
+                                    registration_dialog.setWindowTitle('提示...')
+                                    registration_dialog.setText('注册成功!!!')
+                                    registration_dialog.addButton('去登录...', QMessageBox.AcceptRole)
+                                    registration_dialog.accepted.connect(self.goToLogin)  # 连接accepted信号到goToLogin槽函数
+                                    registration_dialog.exec_()
+                                    self.UserLogin = UserLoginWindows()
+                                    self.UserLogin.ui.show()
+                                    self.ui.close()
+                                else:
+                                    QMessageBox.warning(self, '提示', '邮箱为空或格式不正确')
+                            else:
+                                QMessageBox.warning(self, '提示', '账号为空或格式不正确')
                         else:
-                            QMessageBox.warning(self, '提示', '邮箱为空或格式不正确')
-                    else:
-                        QMessageBox.warning(self, '提示', '账号为空或格式不正确')
+                            QMessageBox.warning(self, '提示', '密码为空或两次输入不同')
+                    except Exception as e1:
+                        print("An error occurred:", e1)
                 else:
-                    QMessageBox.warning(self, '提示', '密码为空或两次输入不同')
-
-            except Exception as e:
-                print("An error occurred:", e)
-
+                    QMessageBox.warning(self, '提示', '不是本校人员,禁止注册账号!!!')
+            except Exception as e2:
+                print("An error occurred:", e2)
 
     def goToLogin(self):
         self.close()  # 关闭当前的注册界面

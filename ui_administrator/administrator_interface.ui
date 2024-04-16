@@ -111,14 +111,17 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
-          <widget class="QLineEdit" name="user_numbe_text">
+          <widget class="QLineEdit" name="user_number_text">
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit">
+          <widget class="QLineEdit" name="password_2">
+           <property name="echoMode">
+            <enum>QLineEdit::Password</enum>
+           </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>

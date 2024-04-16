@@ -3,15 +3,30 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import *
 
+from mysql import OpenMySql
+
 
 class RecommendedBooks(QMainWindow):
-    # def __init__(self):
-    #     super().__init__()
-    #     self.ui = uic.loadUi('./ui_user/Recommended_books.ui')
-
     def __init__(self):
         super().__init__()
         self.ui = uic.loadUi('./ui_user/Recommended_books_Null.ui')
+        # 连接到 MySQL 数据库
+        self.db = OpenMySql.open_connection()
+        if self.db:
+            try:
+                # 创建游标对象
+                cursor = self.db.cursor()
+
+                # 创建查询语句
+                cursor.execute("SELECT major,id FROM student_account WHERE id = (SELECT id FROM dl_user)")
+                result = cursor.fetchone()
+                if result[0]:
+                    self.ui = uic.loadUi('./ui_user/Recommended_books.ui')
+                cursor.close()
+                self.db.close()
+            except Exception as e:
+                print("An error occurred:", e)
+
         self.ui.book_button.clicked.connect(self.OpenBookstore)
         self.ui.collect.clicked.connect(self.Opencollect)
         self.ui.reserve.clicked.connect(self.Openreserve)

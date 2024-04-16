@@ -112,15 +112,101 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="2,0,2">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,1,0">
         <item>
-         <widget class="QComboBox" name="comboBox"/>
+         <widget class="QComboBox" name="comboBox">
+          <property name="currentIndex">
+           <number>-1</number>
+          </property>
+          <item>
+           <property name="text">
+            <string>文学与艺术</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>历史与地理</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>社会科学</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>自然科学</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>技术与工程</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>健康与心理</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>教育与教材</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>宗教与哲学</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>参考资料与工具书</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>医学与健康</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>农业与环境</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>科学与技术</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>旅行与地理</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>食品与饮食</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>体育与运动</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>家庭与生活</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>心灵与成长</string>
+           </property>
+          </item>
+         </widget>
         </item>
         <item>
          <widget class="QComboBox" name="comboBox_2"/>
-        </item>
-        <item>
-         <widget class="QComboBox" name="comboBox_3"/>
         </item>
         <item>
          <widget class="QPushButton" name="pushButton_1">
@@ -150,7 +236,7 @@
          <widget class="QLineEdit" name="lineEdit"/>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="pushButton_2">
           <property name="enabled">
            <bool>true</bool>
           </property>

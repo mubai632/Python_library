@@ -10,14 +10,16 @@ class SearchThread1(QThread):
     # 根据搜索框进行搜索
     search_finished = pyqtSignal(object)  # 定义一个信号，在搜索完成时发射
 
-    def __init__(self, db, cursor):
+    def __init__(self, db, cursor, name):
         super().__init__()
+        self.name = name
         self.db = db
         self.cursor = cursor
 
     def run(self):
         # 查询数据库获取数据
-        self.cursor.execute("SELECT * FROM student_information")
+        query = "SELECT * FROM bookstore WHERE book_name LIKE %s"
+        self.cursor.execute(query, ('%' + self.name + '%',))
         data = self.cursor.fetchall()
         self.search_finished.emit(data)  # 发射信号，传递数据
 
@@ -26,14 +28,16 @@ class SearchThread2(QThread):
     # 根据combobox进行搜索
     search_finished = pyqtSignal(object)  # 定义一个信号，在搜索完成时发射
 
-    def __init__(self, db, cursor):
+    def __init__(self, db, cursor, leibie):
         super().__init__()
+        self.leibie = leibie
         self.db = db
         self.cursor = cursor
 
     def run(self):
         # 查询数据库获取数据
-        self.cursor.execute("SELECT * FROM student_information")
+        query = "SELECT * FROM bookstore WHERE leibie_tow = %s"
+        self.cursor.execute(query, (self.leibie,))
         data = self.cursor.fetchall()
         self.search_finished.emit(data)  # 发射信号，传递数据
 
@@ -136,6 +140,9 @@ class Bookstore(QMainWindow):
         self.db = OpenMySql.open_connection()
         self.cursor = self.db.cursor()
 
+        # 判断combobox中的内容
+        leibie = self.ui.comboBox_2.currentText()
+
         # 清除所有子部件
         layout = self.ui.scrollAreaWidgetContents_2.layout()
         while layout.count():
@@ -151,7 +158,7 @@ class Bookstore(QMainWindow):
         self.table_widget.setColumnCount(5)  # 有5列
 
         # 创建并启动线程执行查询
-        self.search_thread = SearchThread2(self.db, self.cursor)
+        self.search_thread = SearchThread2(self.db, self.cursor, leibie)
         self.search_thread.search_finished.connect(self.add_data_to_table)  # 连接信号到槽函数
         self.search_thread.start()
 
@@ -159,6 +166,9 @@ class Bookstore(QMainWindow):
         self.db = OpenMySql.open_connection()
         self.cursor = self.db.cursor()
 
+        # 获取搜索框的内容
+        name = self.ui.lineEdit.text().strip()
+
         # 清除所有子部件
         layout = self.ui.scrollAreaWidgetContents_2.layout()
         while layout.count():
@@ -171,10 +181,10 @@ class Bookstore(QMainWindow):
         layout.addWidget(self.table_widget)  # 添加表格到布局中
 
         # 设置表格的列数
-        self.table_widget.setColumnCount(5)  # 有5列
+        self.table_widget.setColumnCount(6)  # 有5列
 
         # 创建并启动线程执行查询
-        self.search_thread = SearchThread1(self.db, self.cursor)
+        self.search_thread = SearchThread1(self.db, self.cursor, name)
         self.search_thread.search_finished.connect(self.add_data_to_table)  # 连接信号到槽函数
         self.search_thread.start()
 
@@ -182,9 +192,6 @@ class Bookstore(QMainWindow):
         # 将数据添加到表格中
         for row_data in data:
             self.add_row_to_table(row_data)
-
-        # 关闭数据库连接
-        self.db.close()
 
     def add_row_to_table(self, row_data):
         # 获取表格的当前行数
@@ -198,3 +205,39 @@ class Bookstore(QMainWindow):
             item = QTableWidgetItem(str(cell_data))
             self.table_widget.setItem(current_row, col_num, item)
 
+        # 添加收藏按钮到最后一列
+        btn = QPushButton("收藏")
+        btn.clicked.connect(lambda state, row=current_row: self.collect_button_clicked(row))
+        self.table_widget.setCellWidget(current_row, 5, btn)  # 最后一列
+
+    def collect_button_clicked(self, row):
+        # 获取要收藏的行的数据
+        num_cols = self.table_widget.columnCount()
+        items = []
+        for col in range(num_cols):
+            item = self.table_widget.item(row, col)
+            if item is not None:
+                items.append(item.text())
+
+        try:
+            # 创建一个游标并执行查询
+            self.cursor = self.db.cursor()
+            self.cursor.execute("SELECT id FROM dl_user")
+            # 检索查询结果
+            result = self.cursor.fetchone()
+            dl_id = result[0]
+
+            # 检索收藏图书是否存在
+            self.cursor.execute("SELECT COUNT(*) FROM book_collect_table WHERE id = %s AND book_name = %s",
+                                (dl_id, items[0]))
+            result = self.cursor.fetchone()
+            count = result[0]
+            if count > 0:
+                QMessageBox.warning(self, '提示', '已在收藏目录中!!!')
+            else:
+                # 插入数据到收藏列表数据库中
+                sql = "INSERT INTO book_collect_table (id, book_name, book_zuozhe, book_jieshao, leibie_one, leibie_tow) VALUES (%s, %s, %s, %s, %s, %s)"
+                self.cursor.execute(sql, (dl_id, *items,))
+                self.db.commit()  # 提交事务
+        except Exception as e:
+            print("Error:", e)

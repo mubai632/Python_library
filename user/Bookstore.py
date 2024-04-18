@@ -153,8 +153,8 @@ class Bookstore(QMainWindow):
         layout.addWidget(self.table_widget)  # 添加表格到布局中
 
         # 设置表格的列数
-        self.table_widget.setColumnCount(7)  # 有7列
-        column_labels = ["书名", "作者", "介绍", "第一大类", "第二大类", "收藏", "预约"]
+        self.table_widget.setColumnCount(8)  # 有8列
+        column_labels = ["书名", "作者", "介绍", "第一大类", "第二大类", "图书编号", "收藏", "预约"]
         self.table_widget.setHorizontalHeaderLabels(column_labels)
 
         # 创建并启动线程执行查询
@@ -181,8 +181,8 @@ class Bookstore(QMainWindow):
         layout.addWidget(self.table_widget)  # 添加表格到布局中
 
         # 设置表格的列数
-        self.table_widget.setColumnCount(7)  # 有7列
-        column_labels = ["书名", "作者", "介绍", "第一大类", "第二大类", "收藏", "预约"]
+        self.table_widget.setColumnCount(8)  # 有8列
+        column_labels = ["书名", "作者", "介绍", "第一大类", "第二大类", "图书编号", "收藏", "预约"]
         self.table_widget.setHorizontalHeaderLabels(column_labels)
 
         # 创建并启动线程执行查询
@@ -210,12 +210,12 @@ class Bookstore(QMainWindow):
         # 添加收藏按钮
         btn = QPushButton("收藏")
         btn.clicked.connect(lambda state, row=current_row: self.collect_button_clicked_btn(row))
-        self.table_widget.setCellWidget(current_row, 5, btn)  # 最后一列
+        self.table_widget.setCellWidget(current_row, 6, btn)  # 最后一列
 
         # 添加收藏按钮
         reserve = QPushButton("预约")
         reserve.clicked.connect(lambda state, row=current_row: self.collect_button_clicked_reserve(row))
-        self.table_widget.setCellWidget(current_row, 6, reserve)  # 最后一列
+        self.table_widget.setCellWidget(current_row, 7, reserve)  # 最后一列
 
     def collect_button_clicked_reserve(self, row):
         # 获取要预约的行的数据
@@ -243,7 +243,7 @@ class Bookstore(QMainWindow):
                 QMessageBox.warning(self, '提示', '已预约!!!')
             else:
                 # 插入数据到预约列表数据库中
-                sql = "INSERT INTO book_reserve_table (id, book_name, book_zuozhe, book_jieshao, leibie_one, leibie_tow) VALUES (%s, %s, %s, %s, %s, %s)"
+                sql = "INSERT INTO book_reserve_table (id, book_name, book_zuozhe, book_jieshao, leibie_one, leibie_tow, book_bianhao) VALUES (%s, %s, %s, %s, %s, %s, %s)"
                 self.cursor.execute(sql, (dl_id, *items,))
                 self.db.commit()  # 提交事务
                 QMessageBox.warning(self, "提示", "预约成功!!!")
@@ -276,7 +276,7 @@ class Bookstore(QMainWindow):
                 QMessageBox.warning(self, '提示', '已在收藏目录中!!!')
             else:
                 # 插入数据到收藏列表数据库中
-                sql = "INSERT INTO book_collect_table (id, book_name, book_zuozhe, book_jieshao, leibie_one, leibie_tow) VALUES (%s, %s, %s, %s, %s, %s)"
+                sql = "INSERT INTO book_collect_table (id, book_name, book_zuozhe, book_jieshao, leibie_one, leibie_tow, book_bianhao) VALUES (%s, %s, %s, %s, %s, %s, %s)"
                 self.cursor.execute(sql, (dl_id, *items,))
                 self.db.commit()  # 提交事务
                 QMessageBox.warning(self, "提示", "收藏成功!!!")

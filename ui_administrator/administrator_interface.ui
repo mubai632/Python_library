@@ -112,6 +112,9 @@
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
           <widget class="QLineEdit" name="user_number_text">
+           <property name="whatsThis">
+            <string/>
+           </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>

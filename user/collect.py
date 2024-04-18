@@ -188,15 +188,13 @@ class collect(QMainWindow):
                 count = result1[0]
                 if count == 0:
                     # 插入数据
-                    sql = "Insert into book_reserve_table VALUES (%s, %s, %s, %s, %s, %s)"
+                    sql = "Insert into book_reserve_table VALUES (%s, %s, %s, %s, %s, %s, %s)"
                     self.cursor.execute(sql, (*items,))
                     self.db.commit()  # 提交事务
                     QMessageBox.warning(self, "提示", "预约成功!!!")
                 else:
                     QMessageBox.warning(self, "提示", "书籍已预约!!!")
 
-                # 删除成功后重新加载数据到表格
-                self.reload_table_data()  # 假设有一个函数用来重新加载数据
         except Exception as e:
             print("Error:", e)
 
@@ -205,7 +203,7 @@ class collect(QMainWindow):
         self.table_widget.clear()
 
         # 重新设置表格的列数
-        self.table_widget.setColumnCount(8)
+        self.table_widget.setColumnCount(9)
 
         try:
             # 创建一个游标并执行查询

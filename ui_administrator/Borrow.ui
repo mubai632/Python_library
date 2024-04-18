@@ -114,11 +114,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="number">
-          <property name="currentIndex">
-           <number>-1</number>
-          </property>
-         </widget>
+         <widget class="QLineEdit" name="number"/>
         </item>
        </layout>
       </item>
@@ -132,7 +128,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="book_name"/>
+         <widget class="QLineEdit" name="book_name"/>
         </item>
        </layout>
       </item>
@@ -220,7 +216,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="lineEdit_3"/>
+         <widget class="QLineEdit" name="numberphone"/>
         </item>
        </layout>
       </item>
@@ -249,6 +245,9 @@
         </property>
         <property name="widgetResizable">
          <bool>true</bool>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
         <widget class="QWidget" name="scrollAreaWidgetContents">
          <property name="geometry">

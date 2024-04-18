@@ -55,7 +55,7 @@ class reserve(QMainWindow):
                     layout.addWidget(self.table_widget)  # 添加表格到布局中
 
                     # 设置表格的列数和对应的标题文字
-                    self.table_widget.setColumnCount(7)  # 有7列
+                    self.table_widget.setColumnCount(8)  # 有8列
                     column_labels = ["用户id", "书名", "作者", "介绍", "第一大类", "第二大类", "删除"]
                     self.table_widget.setHorizontalHeaderLabels(column_labels)
 
@@ -123,7 +123,7 @@ class reserve(QMainWindow):
         # 添加删除按钮
         book_delete = QPushButton("删除")
         book_delete.clicked.connect(lambda state, row=current_row: self.collect_button_clicked_book_delete(row))
-        self.table_widget.setCellWidget(current_row, 6, book_delete)  # 最后一列
+        self.table_widget.setCellWidget(current_row, 7, book_delete)  # 最后一列
 
     def collect_button_clicked_book_delete(self, row):
         # 获取要删除的行的数据

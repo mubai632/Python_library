@@ -9,6 +9,7 @@ class OpenMySql():
             host="localhost",
             user="root",
             password="000000",
-            database="book_library"
+            database="book_library",
+            charset="utf8"
         )
         return db

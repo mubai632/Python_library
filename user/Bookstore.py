@@ -56,8 +56,6 @@ class Bookstore(QMainWindow):
 
         self.ui.comboBox.currentIndexChanged.connect(self.updateComboBox2)
 
-
-
     # 定义按钮点击事件
     def OpenRecommended_books(self):
         from user.Recommended_books import RecommendedBooks
@@ -155,7 +153,9 @@ class Bookstore(QMainWindow):
         layout.addWidget(self.table_widget)  # 添加表格到布局中
 
         # 设置表格的列数
-        self.table_widget.setColumnCount(5)  # 有5列
+        self.table_widget.setColumnCount(7)  # 有7列
+        column_labels = ["书名", "作者", "介绍", "第一大类", "第二大类", "收藏", "预约"]
+        self.table_widget.setHorizontalHeaderLabels(column_labels)
 
         # 创建并启动线程执行查询
         self.search_thread = SearchThread2(self.db, self.cursor, leibie)
@@ -181,7 +181,9 @@ class Bookstore(QMainWindow):
         layout.addWidget(self.table_widget)  # 添加表格到布局中
 
         # 设置表格的列数
-        self.table_widget.setColumnCount(6)  # 有5列
+        self.table_widget.setColumnCount(7)  # 有7列
+        column_labels = ["书名", "作者", "介绍", "第一大类", "第二大类", "收藏", "预约"]
+        self.table_widget.setHorizontalHeaderLabels(column_labels)
 
         # 创建并启动线程执行查询
         self.search_thread = SearchThread1(self.db, self.cursor, name)
@@ -205,12 +207,50 @@ class Bookstore(QMainWindow):
             item = QTableWidgetItem(str(cell_data))
             self.table_widget.setItem(current_row, col_num, item)
 
-        # 添加收藏按钮到最后一列
+        # 添加收藏按钮
         btn = QPushButton("收藏")
-        btn.clicked.connect(lambda state, row=current_row: self.collect_button_clicked(row))
+        btn.clicked.connect(lambda state, row=current_row: self.collect_button_clicked_btn(row))
         self.table_widget.setCellWidget(current_row, 5, btn)  # 最后一列
 
-    def collect_button_clicked(self, row):
+        # 添加收藏按钮
+        reserve = QPushButton("预约")
+        reserve.clicked.connect(lambda state, row=current_row: self.collect_button_clicked_reserve(row))
+        self.table_widget.setCellWidget(current_row, 6, reserve)  # 最后一列
+
+    def collect_button_clicked_reserve(self, row):
+        # 获取要预约的行的数据
+        num_cols = self.table_widget.columnCount()
+        items = []
+        for col in range(num_cols):
+            item = self.table_widget.item(row, col)
+            if item is not None:
+                items.append(item.text())
+
+        try:
+            # 创建一个游标并执行查询
+            self.cursor = self.db.cursor()
+            self.cursor.execute("SELECT id FROM dl_user")
+            # 检索查询结果
+            result = self.cursor.fetchone()
+            dl_id = result[0]
+
+            # 检索预约图书是否存在
+            self.cursor.execute("SELECT COUNT(*) FROM book_reserve_table WHERE id = %s AND book_name = %s",
+                                (dl_id, items[0]))
+            result = self.cursor.fetchone()
+            count = result[0]
+            if count > 0:
+                QMessageBox.warning(self, '提示', '已预约!!!')
+            else:
+                # 插入数据到预约列表数据库中
+                sql = "INSERT INTO book_reserve_table (id, book_name, book_zuozhe, book_jieshao, leibie_one, leibie_tow) VALUES (%s, %s, %s, %s, %s, %s)"
+                self.cursor.execute(sql, (dl_id, *items,))
+                self.db.commit()  # 提交事务
+                QMessageBox.warning(self, "提示", "预约成功!!!")
+        except Exception as e:
+            print("Error:", e)
+
+    def collect_button_clicked_btn(self, row):
         # 获取要收藏的行的数据
         num_cols = self.table_widget.columnCount()
         items = []
@@ -239,5 +279,16 @@ class Bookstore(QMainWindow):
                 sql = "INSERT INTO book_collect_table (id, book_name, book_zuozhe, book_jieshao, leibie_one, leibie_tow) VALUES (%s, %s, %s, %s, %s, %s)"
                 self.cursor.execute(sql, (dl_id, *items,))
                 self.db.commit()  # 提交事务
+                QMessageBox.warning(self, "提示", "收藏成功!!!")
         except Exception as e:
             print("Error:", e)
+
+    # 使用close函数关闭界面的时候,调用函数,关闭数据库
+    def closeEvent(self, event):
+        # 关闭数据库连接
+        if self.cursor:
+            self.cursor.close()
+        if self.db:
+            self.db.close()
+        # 接受关闭事件
+        event.accept()

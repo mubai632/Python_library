@@ -109,7 +109,7 @@
      <property name="title">
       <string>借阅信息输入</string>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,0,0,0,0,0,1">
+     <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,0,0,0,0,0,0,1">
       <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
@@ -133,11 +133,21 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="number">
-          <property name="currentIndex">
-           <number>-1</number>
+         <widget class="QLineEdit" name="bianhao"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_7">
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>学号/工号:</string>
           </property>
          </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="user_id"/>
         </item>
        </layout>
       </item>
@@ -151,7 +161,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="book_name"/>
+         <widget class="QLineEdit" name="book_name"/>
         </item>
        </layout>
       </item>

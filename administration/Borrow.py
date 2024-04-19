@@ -34,7 +34,7 @@ class Borrow(QMainWindow):
         self.ui.user_info.clicked.connect(self.OpenUserInfo)
         self.ui.setting.clicked.connect(self.OpenSetting)
 
-        self.ui.pushButton.clicked.connect(self.InsterInto)
+        self.ui.pushButton.clicked.connect(self.InsertInto)
         self.ui.number.focusOutEvent = self.handle_focus_out_event  # 将文本框的焦点离开事件连接到自定义方法
 
         self.db = OpenMySql.open_connection()
@@ -84,7 +84,7 @@ class Borrow(QMainWindow):
         self.Setting.ui.show()
         self.ui.close()
 
-    def InsterInto(self):
+    def InsertInto(self):
         bianhao = self.ui.number.text()
         book_name = self.ui.book_name.text()
         borrow_day = self.ui.time.currentText()
@@ -95,12 +95,26 @@ class Borrow(QMainWindow):
         current_time = datetime.now()
         # 将时间格式化为与 SQL 中的 DATETIME 类型相似的格式
         time = current_time.strftime('%Y-%m-%d %H:%M:%S')
-        sql = "INSERT INTO admin_borrow (book_id, book_name, borrow_day, user_id, user_name, phone_number, yymmdd) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+
+        # 查询是否存在
+        sql = "SELECT COUNT(*) FROM admin_borrow WHERE book_id = %s and user_id = %s"
         # 执行 SQL 查询
-        value = (bianhao, book_name, borrow_day, user_id, name, numberphone, time)
+        value = (bianhao, user_id)
         self.cursor.execute(sql, value)
-        self.db.commit()
-        QMessageBox.warning(self, "提示", "录入成功!!!")
+        reulet = self.cursor.fetchone()
+        if reulet[0] == 0:
+            sql = "INSERT INTO admin_borrow (book_id, book_name, borrow_day, user_id, user_name, phone_number, yymmdd) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            # 执行 SQL 查询
+            value = (bianhao, book_name, borrow_day, user_id, name, numberphone, time)
+            self.cursor.execute(sql, value)
+            self.db.commit()
+            QMessageBox.warning(self, "提示", "录入成功!!!")
+        else:
+            QMessageBox.warning(self, "提示", "本书30天内已借阅!!!")
+
+
+        # 刷新表格界面
+        self.refresh_table()
 
     def UpdateBookName(self):
         query = "SELECT book_bianhao.id, bookstore.book_bianhao FROM bookstore, book_bianhao WHERE bookstore.leibie_tow = book_bianhao.leibie_tow"
@@ -132,6 +146,14 @@ class Borrow(QMainWindow):
             for col_num, cell_data in enumerate(row_data):
                 item = QTableWidgetItem(str(cell_data))
                 self.table_widget.setItem(current_row, col_num, item)
+
+    def refresh_table(self):
+        # 清空表格
+        self.table_widget.clearContents()
+        # 删除表格行
+        self.table_widget.setRowCount(0)
+        # 重新查询数据并添加到表格中
+        self.search_thread.start()
 
     # 使用close函数关闭界面的时候,调用函数,关闭数据库
     def closeEvent(self, event):

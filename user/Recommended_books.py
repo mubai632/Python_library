@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 # 推荐书籍
 from PyQt5 import uic
+from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 
 from mysql import OpenMySql
@@ -63,4 +64,11 @@ class RecommendedBooks(QMainWindow):
         self.PersonalInformation = PersonalInformation()
         self.PersonalInformation.ui.show()
         self.ui.close()
+
+    def closeEvent(self, event):
+        if self.db:
+            self.db.close()
+        # 处理 Qt 事件队列，确保界面关闭前所有事件都被处理完毕
+        QCoreApplication.processEvents()
+
 

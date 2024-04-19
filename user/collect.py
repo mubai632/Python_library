@@ -82,30 +82,40 @@ class collect(QMainWindow):
         self.RecommendedBooks = RecommendedBooks()
         self.RecommendedBooks.ui.show()
         self.ui.close()
+        # 如果存在旧的连接和游标，则先关闭它们
+        self.close_old_connection_and_cursor()
 
     def OpenBookstore(self):
         from user.Bookstore import Bookstore
         self.Bookstore = Bookstore()
         self.Bookstore.ui.show()
         self.ui.close()
+        # 如果存在旧的连接和游标，则先关闭它们
+        self.close_old_connection_and_cursor()
 
     def Openreserve(self):
         from user.reserve import reserve
         self.reserve = reserve()
         self.reserve.ui.show()
         self.ui.close()
+        # 如果存在旧的连接和游标，则先关闭它们
+        self.close_old_connection_and_cursor()
 
     def OpenReportLoss(self):
         from user.Report_loss import ReportLoss
         self.ReportLoss = ReportLoss()
         self.ReportLoss.ui.show()
         self.ui.close()
+        # 如果存在旧的连接和游标，则先关闭它们
+        self.close_old_connection_and_cursor()
 
     def OpenPersonalInformation(self):
         from user.personal_information import PersonalInformation
         self.PersonalInformation = PersonalInformation()
         self.PersonalInformation.ui.show()
         self.ui.close()
+        # 如果存在旧的连接和游标，则先关闭它们
+        self.close_old_connection_and_cursor()
 
     def add_data_to_table(self, data):
         # 将数据添加到表格中
@@ -237,11 +247,8 @@ class collect(QMainWindow):
             print("Error:", e)
 
     # 使用close函数关闭界面的时候,调用函数,关闭数据库
-    def closeEvent(self, event):
-        # 关闭数据库连接
+    def close_old_connection_and_cursor(self):
         if self.cursor:
             self.cursor.close()
         if self.db:
             self.db.close()
-        # 接受关闭事件
-        event.accept()

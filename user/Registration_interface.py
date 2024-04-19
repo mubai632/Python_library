@@ -112,13 +112,6 @@ class RegistrationInterface(QMainWindow):
             else:
                 self.ui.user_number_yesorno.setText('账号长度错误')
 
-
-                # if self.db:
-                #     print("你好")
-                # else:
-                #     print("Failed to connect to MySQL database:", self.db.lastError().text())
-                #
-
     def UpdatePassword1(self, text):
         if text.strip():  # 检查文本框是否有内容
             if len(text.strip()) < 3:

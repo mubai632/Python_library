@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 # 个人信息
 from PyQt5 import uic
+from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtWidgets import *
 
 from mysql import OpenMySql
@@ -107,6 +108,12 @@ class PersonalInformation(QMainWindow):
             QMessageBox.warning(self, '提示', '提交失败')
         cursor.close()
         self.db.close()
+
+    def closeEvent(self, event):
+        if self.db:
+            self.db.close()
+        # 处理 Qt 事件队列，确保界面关闭前所有事件都被处理完毕
+        QCoreApplication.processEvents()
 
 
 

@@ -285,10 +285,9 @@ class Bookstore(QMainWindow):
 
     # 使用close函数关闭界面的时候,调用函数,关闭数据库
     def closeEvent(self, event):
-        # 关闭数据库连接
         if self.cursor:
             self.cursor.close()
         if self.db:
             self.db.close()
-        # 接受关闭事件
-        event.accept()
+        # 处理 Qt 事件队列，确保界面关闭前所有事件都被处理完毕
+        QCoreApplication.processEvents()

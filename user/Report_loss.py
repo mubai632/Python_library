@@ -39,12 +39,12 @@ class SearchThread2(QThread):
         sql ="SELECT id FROM dl_user"
         self.cursor.execute(sql)
         result = self.cursor.fetchone()
-
-        # 查询数据库获取数据
-        query = "SELECT * FROM book_report_loss WHERE user_id = %s"
-        self.cursor.execute(query, (result[0],))
-        data2 = self.cursor.fetchall()
-        self.search_finished.emit(data2)  # 发射信号，传递数据
+        if result is not None:
+            # 查询数据库获取数据
+            query = "SELECT * FROM book_report_loss WHERE user_id = %s"
+            self.cursor.execute(query, (result[0],))
+            data2 = self.cursor.fetchall()
+            self.search_finished.emit(data2)  # 发射信号，传递数据
 
 
 class ReportLoss(QMainWindow):
@@ -59,8 +59,9 @@ class ReportLoss(QMainWindow):
 
         self.db = OpenMySql.open_connection()
         self.cursor = self.db.cursor()
-        self.sss1()
-        self.sss2()
+
+        # 在进入报告界面之后的初始化函数中调用
+        QTimer.singleShot(100, self.load_data)
 
     # 定义按钮点击事件
     def OpenRecommended_books(self):
@@ -68,30 +69,40 @@ class ReportLoss(QMainWindow):
         self.RecommendedBooks = RecommendedBooks()
         self.RecommendedBooks.ui.show()
         self.ui.close()
+        # 如果存在旧的连接和游标，则先关闭它们
+        self.close_old_connection_and_cursor()
 
     def OpenBookstore(self):
         from user.Bookstore import Bookstore
         self.Bookstore = Bookstore()
         self.Bookstore.ui.show()
         self.ui.close()
+        # 如果存在旧的连接和游标，则先关闭它们
+        self.close_old_connection_and_cursor()
 
     def Opencollect(self):
         from user.collect import collect
         self.collect = collect()
         self.collect.ui.show()
         self.ui.close()
+        # 如果存在旧的连接和游标，则先关闭它们
+        self.close_old_connection_and_cursor()
 
     def Openreserve(self):
         from user.reserve import reserve
         self.reserve = reserve()
         self.reserve.ui.show()
         self.ui.close()
+        # 如果存在旧的连接和游标，则先关闭它们
+        self.close_old_connection_and_cursor()
 
     def OpenPersonalInformation(self):
         from user.personal_information import PersonalInformation
         self.PersonalInformation = PersonalInformation()
         self.PersonalInformation.ui.show()
         self.ui.close()
+        # 如果存在旧的连接和游标，则先关闭它们
+        self.close_old_connection_and_cursor()
 
     def sss1(self):
         layout1 = self.ui.scrollAreaWidgetContents.layout()
@@ -114,9 +125,12 @@ class ReportLoss(QMainWindow):
         self.table_widget_2 = QTableWidget()
         layout2.addWidget(self.table_widget_2)  # 添加表格到布局中
         # 设置表格的列数和对应的标题文字
-        self.table_widget_2.setColumnCount(8)  # 有8列
-        column_labels = ["书籍编号", "书名", "借阅期限", "用户id", "用户姓名", "手机号", "借阅时间"]
+        self.table_widget_2.setColumnCount(4)  # 有4列
+        column_labels = ["书籍编号", "书名", "用户id"]
         self.table_widget_2.setHorizontalHeaderLabels(column_labels)
+
+        # 添加一行空行
+        self.table_widget_2.insertRow(0)
 
         # 创建并启动线程执行查询
         self.search_thread_2 = SearchThread2(self.db, self.cursor)
@@ -128,11 +142,13 @@ class ReportLoss(QMainWindow):
         self.add_row_to_table1(data[0])
 
     def add_data_to_table_2(self, data):
-        # 将数据添加到表格2中
-        if data:
-            self.add_row_to_table2(data)
-        else:
-            self.add_row_to_table2(data[0])
+        # 如果数据为空，则直接返回，不执行后续操作
+        if not data:
+            return
+        # 删除之前的空行
+        self.table_widget_2.removeRow(0)
+
+        self.add_row_to_table2(data)
 
     def add_row_to_table1(self, row_data):
         # 获取表格的当前行数
@@ -146,9 +162,9 @@ class ReportLoss(QMainWindow):
             item = QTableWidgetItem(str(cell_data))
             self.table_widget_1.setItem(current_row, col_num, item)
 
-        # 添加删除按钮
+        # 添加挂失按钮
         book_delete = QPushButton("挂失")
-        book_delete.clicked.connect(lambda state, row=current_row: self.collect_button_clicked_book_delete(row))
+        book_delete.clicked.connect(lambda state, row=current_row: self.ReportLoss(row))
         self.table_widget_1.setCellWidget(current_row, 7, book_delete)  # 最后一列
 
     def add_row_to_table2(self, row_data):
@@ -159,14 +175,13 @@ class ReportLoss(QMainWindow):
         self.table_widget_2.insertRow(current_row)
 
         # 在新行中添加数据
-        for col_num, cell_data in enumerate(row_data):
+        for col_num, cell_data in enumerate(row_data[0]):
             item = QTableWidgetItem(str(cell_data))
             self.table_widget_2.setItem(current_row, col_num, item)
-        # if row_data:
         # # 添加删除按钮
-        book_delete = QPushButton("删除")
+        book_delete = QPushButton("取消挂失")
         book_delete.clicked.connect(lambda state, row=current_row: self.NoReportLoss(row))
-        self.table_widget_2.setCellWidget(current_row, 7, book_delete)  # 最后一列
+        self.table_widget_2.setCellWidget(current_row, 3, book_delete)  # 最后一列
 
     def ReportLoss(self, row):
         # 获取要挂失的行的数据
@@ -202,29 +217,42 @@ class ReportLoss(QMainWindow):
 
     def NoReportLoss(self, row):
         # 获取要删除的行的数据
-        num_cols = self.table_widget.columnCount()
+        num_cols = self.table_widget_2.columnCount()
         items = []
         for col in range(num_cols):
-            item = self.table_widget.item(row, col)
+            item = self.table_widget_2.item(row, col)
             if item is not None:
                 items.append(item.text())
         try:
             # 创建一个游标并执行查询
             self.cursor = self.db.cursor()
-
             # 检索收藏图书是否存在
-            self.cursor.execute("SELECT COUNT(*) FROM book_collect_table WHERE id = %s AND book_name = %s",
-                                (items[0], items[1]))
+            self.cursor.execute("SELECT COUNT(*) FROM book_report_loss WHERE book_id = %s AND user_id = %s",
+                                (items[0], items[2]))
             result = self.cursor.fetchone()
             count = result[0]
             if count > 0:
                 # 删除数据
-                sql = "DELETE FROM book_collect_table WHERE id = %s AND book_name = %s"
-                self.cursor.execute(sql, (items[0], items[1],))
+                sql = "DELETE FROM book_report_loss WHERE book_id = %s AND user_id = %s"
+                self.cursor.execute(sql, (items[0], items[2],))
                 self.db.commit()  # 提交事务
                 QMessageBox.warning(self, "提示", "删除成功!!!")
 
-                # 删除成功后重新加载数据到表格
-                self.reload_table_data()  # 假设有一个函数用来重新加载数据
+                # 删除成功后更新表格中的数据
+                self.table_widget_2.removeRow(row)
+
         except Exception as e:
             print("Error:", e)
+
+    def load_data(self):
+        self.sss1()
+        self.sss2()
+
+    # 使用close函数关闭界面的时候,调用函数,关闭数据库
+    def close_old_connection_and_cursor(self):
+        if self.cursor:
+            self.cursor.close()
+        if self.db:
+            self.db.close()
+        # 处理 Qt 事件队列，确保界面关闭前所有事件都被处理完毕
+        QCoreApplication.processEvents()

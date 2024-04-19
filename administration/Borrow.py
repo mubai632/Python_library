@@ -132,3 +132,13 @@ class Borrow(QMainWindow):
             for col_num, cell_data in enumerate(row_data):
                 item = QTableWidgetItem(str(cell_data))
                 self.table_widget.setItem(current_row, col_num, item)
+
+    # 使用close函数关闭界面的时候,调用函数,关闭数据库
+    def closeEvent(self, event):
+        # 关闭数据库连接
+        if self.cursor:
+            self.cursor.close()
+        if self.db:
+            self.db.close()
+        # 接受关闭事件
+        event.accept()

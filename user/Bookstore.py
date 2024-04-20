@@ -212,7 +212,7 @@ class Bookstore(QMainWindow):
         btn.clicked.connect(lambda state, row=current_row: self.collect_button_clicked_btn(row))
         self.table_widget.setCellWidget(current_row, 6, btn)  # 最后一列
 
-        # 添加收藏按钮
+        # 添加预约按钮
         reserve = QPushButton("预约")
         reserve.clicked.connect(lambda state, row=current_row: self.collect_button_clicked_reserve(row))
         self.table_widget.setCellWidget(current_row, 7, reserve)  # 最后一列
@@ -244,7 +244,7 @@ class Bookstore(QMainWindow):
             else:
                 # 插入数据到预约列表数据库中
                 sql = "INSERT INTO book_reserve_table (id, book_name, book_zuozhe, book_jieshao, leibie_one, leibie_tow, book_bianhao) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-                self.cursor.execute(sql, (dl_id, *items,))
+                self.cursor.execute(sql, (dl_id, items[0], items[1], items[2], items[3], items[4], items[5],))
                 self.db.commit()  # 提交事务
                 QMessageBox.warning(self, "提示", "预约成功!!!")
         except Exception as e:
@@ -277,17 +277,10 @@ class Bookstore(QMainWindow):
             else:
                 # 插入数据到收藏列表数据库中
                 sql = "INSERT INTO book_collect_table (id, book_name, book_zuozhe, book_jieshao, leibie_one, leibie_tow, book_bianhao) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-                self.cursor.execute(sql, (dl_id, *items,))
+                self.cursor.execute(sql, (dl_id, items[0], items[1], items[2], items[3], items[4], items[5],))
                 self.db.commit()  # 提交事务
                 QMessageBox.warning(self, "提示", "收藏成功!!!")
         except Exception as e:
             print("Error:", e)
 
     # 使用close函数关闭界面的时候,调用函数,关闭数据库
-    def closeEvent(self, event):
-        if self.cursor:
-            self.cursor.close()
-        if self.db:
-            self.db.close()
-        # 处理 Qt 事件队列，确保界面关闭前所有事件都被处理完毕
-        QCoreApplication.processEvents()

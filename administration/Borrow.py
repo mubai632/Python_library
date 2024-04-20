@@ -96,6 +96,14 @@ class Borrow(QMainWindow):
         # 将时间格式化为与 SQL 中的 DATETIME 类型相似的格式
         time = current_time.strftime('%Y-%m-%d %H:%M:%S')
 
+        # sql = "SELECT book_bianhao.id, bookstore.book_bianhao FROM bookstore, book_bianhao WHERE bookstore.leibie_tow = book_bianhao.leibie_tow"
+        # # 执行 SQL 查询
+        # self.cursor.execute(sql)
+        # reulet = self.cursor.fetchone()
+        # bianhao  = reulet[0] + "-" + reulet[1]
+        #
+        # print(bianhao)
+
         # 查询是否存在
         sql = "SELECT COUNT(*) FROM admin_borrow WHERE book_id = %s and user_id = %s"
         # 执行 SQL 查询
@@ -120,11 +128,23 @@ class Borrow(QMainWindow):
         query = "SELECT book_bianhao.id, bookstore.book_bianhao FROM bookstore, book_bianhao WHERE bookstore.leibie_tow = book_bianhao.leibie_tow"
         self.cursor.execute(query)
         result = self.cursor.fetchall()
+        print(result)
         for row in result:
             bianhao = self.ui.number.text().strip()
             if bianhao == (row[0] + "-" + row[1]):
-                query = "SELECT book_name FROM bookstore WHERE book_bianhao = %s"
-                self.cursor.execute(query, (row[1]), )
+                sql1 = "SELECT leibie_tow FROM book_bianhao WHERE id = %s "
+                self.cursor.execute(sql1, row[0])
+                print(row[0])   # 01-01
+                leibie = self.cursor.fetchall()
+                print(leibie[0])  # 类别tow
+                sql2 = "SELECT book_bianhao, leibie_tow FROM bookstore WHERE leibie_tow = %s AND book_bianhao = %s "
+                self.cursor.execute(sql2, (leibie[0], row[1]))
+                print(row[1])
+                bianhao = self.cursor.fetchall()
+
+
+                query = "SELECT book_name FROM bookstore WHERE book_bianhao = %s AND leibie_tow = %s"
+                self.cursor.execute(query, (bianhao[0][0], bianhao[0][1]))
                 self.book_name = self.cursor.fetchall()
                 self.ui.book_name.setText(str(self.book_name[0][0]))
 

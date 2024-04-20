@@ -56,7 +56,7 @@ class reserve(QMainWindow):
 
                     # 设置表格的列数和对应的标题文字
                     self.table_widget.setColumnCount(8)  # 有8列
-                    column_labels = ["用户id", "书名", "作者", "介绍", "第一大类", "第二大类", "删除"]
+                    column_labels = ["用户id", "书名", "作者", "介绍", "第一大类", "第二大类", "图书编号", "删除"]
                     self.table_widget.setHorizontalHeaderLabels(column_labels)
 
                     # 创建并启动线程执行查询

@@ -54,19 +54,24 @@ class UserLoginWindows(QMainWindow):
                             sql = "INSERT INTO dl_user (id) VALUES (%s)"
                             value = self.ui.user_number_text.text().strip()
                             cursor.execute(sql, value)
-                            self.db.commit()
+                            try:
+                                self.db.commit()
+                            except Exception as e:
+                                print("提交失败:", e)
 
-                            # 关闭数据库和游标连接
-                            cursor.close()
-                            self.db.close()
-
-                            # 打开推荐图书界面
-                            self.RecommendedBooks = RecommendedBooks()
-                            self.RecommendedBooks.ui.show()
-                            self.ui.close()
-                            # 显示公告
-
-                            QMessageBox.warning(self, '提示', '公告内容')
+                            try:
+                                self.RecommendedBooks = RecommendedBooks()
+                                self.RecommendedBooks.ui.show()
+                                self.ui.close()
+                                sql = "SELECT neirong FROM gonggao"
+                                cursor.execute(sql)
+                                result = cursor.fetchone()
+                                QMessageBox.warning(self, '提示', result[0])
+                                # 关闭数据库和游标连接
+                                cursor.close()
+                                self.db.close()
+                            except Exception as e2:
+                                print(e2)
                         else:
                             QMessageBox.warning(self, '提示', '密码为空或不正确!!!')
                             self.ui.password_2.clear()

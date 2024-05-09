@@ -112,9 +112,11 @@ class Borrow(QMainWindow):
         reulet = self.cursor.fetchone()
         if reulet[0] == 0:
             sql = "INSERT INTO admin_borrow (book_id, book_name, borrow_day, user_id, user_name, phone_number, yymmdd) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            sql2 = "INSERT INTO log_admin_borrow (book_id, book_name, borrow_day, user_id, user_name, phone_number, yymmdd) VALUES (%s, %s, %s, %s, %s, %s, %s)"
             # 执行 SQL 查询
             value = (bianhao, book_name, borrow_day, user_id, name, numberphone, time)
             self.cursor.execute(sql, value)
+            self.cursor.execute(sql2, value)
             self.db.commit()
             QMessageBox.warning(self, "提示", "录入成功!!!")
         else:
@@ -128,18 +130,18 @@ class Borrow(QMainWindow):
         query = "SELECT book_bianhao.id, bookstore.book_bianhao FROM bookstore, book_bianhao WHERE bookstore.leibie_tow = book_bianhao.leibie_tow"
         self.cursor.execute(query)
         result = self.cursor.fetchall()
-        print(result)
+        # print(result)
         for row in result:
             bianhao = self.ui.number.text().strip()
             if bianhao == (row[0] + "-" + row[1]):
                 sql1 = "SELECT leibie_tow FROM book_bianhao WHERE id = %s "
                 self.cursor.execute(sql1, row[0])
-                print(row[0])   # 01-01
+                # print(row[0])   # 01-01
                 leibie = self.cursor.fetchall()
-                print(leibie[0])  # 类别tow
+                # print(leibie[0])  # 类别tow
                 sql2 = "SELECT book_bianhao, leibie_tow FROM bookstore WHERE leibie_tow = %s AND book_bianhao = %s "
                 self.cursor.execute(sql2, (leibie[0], row[1]))
-                print(row[1])
+                # print(row[1])
                 bianhao = self.cursor.fetchall()
 
 

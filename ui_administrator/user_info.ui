@@ -13,9 +13,9 @@
   <property name="windowTitle">
    <string>图书管理系统</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_10">
+  <layout class="QVBoxLayout" name="verticalLayout_10" stretch="0,0,1,1,1,1">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0">
      <item>
       <widget class="QLabel" name="library">
        <property name="styleSheet">
@@ -156,7 +156,11 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_6">
          <item>
-          <widget class="QLineEdit" name="user_search"/>
+          <widget class="QLineEdit" name="user_search">
+           <property name="placeholderText">
+            <string>请输入学号\工号!!</string>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QPushButton" name="user_button">
@@ -218,7 +222,11 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_7">
          <item>
-          <widget class="QLineEdit" name="user_overdue"/>
+          <widget class="QLineEdit" name="user_overdue">
+           <property name="placeholderText">
+            <string>请输入学号\工号!!</string>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QPushButton" name="overdue_button">
@@ -280,7 +288,11 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_8">
          <item>
-          <widget class="QLineEdit" name="book_damage"/>
+          <widget class="QLineEdit" name="book_damage">
+           <property name="placeholderText">
+            <string>请输入学号\工号!!</string>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QPushButton" name="damage_button">
@@ -342,7 +354,11 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_9">
          <item>
-          <widget class="QLineEdit" name="lost_books"/>
+          <widget class="QLineEdit" name="lost_books">
+           <property name="placeholderText">
+            <string>请输入学号\工号!!</string>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QPushButton" name="lost_books_button">

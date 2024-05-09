@@ -2,6 +2,7 @@
 import sys
 from PyQt5.QtCore import *
 from Main_interface import *
+from mysql import *
 
 
 class AppCleanup(QObject):

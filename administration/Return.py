@@ -54,7 +54,6 @@ class Return(QMainWindow):
         self.search_thread.search_finished.connect(self.add_data_to_table)  # 连接信号到槽函数
         self.search_thread.start()
 
-
     # 定义按钮点击事件
     def OpenBorrow(self):
         from administration.Borrow import Borrow
@@ -106,6 +105,10 @@ class Return(QMainWindow):
             self.ui.book_name.setText("无")
 
     def InsertInto(self):
+        text = self.ui.book_name.text()
+        if text == "无":
+            QMessageBox.warning(self, "提示", "没有图书借阅的记录")
+            return
         bianhao = self.ui.bianhao.text().strip()
         user_id = self.ui.user_id.text().strip()
         book_name = self.ui.book_name.text().strip()
@@ -129,7 +132,19 @@ class Return(QMainWindow):
         value = (bianhao, book_name, reulet[0], combobox, phonenumber, user_id, reulet[1], time)
         self.cursor.execute(sql, value)
         self.db.commit()
-        QMessageBox.warning(self, "提示", "录入成功!!!")
+        if self.db.commit:
+            if combobox == "是":
+                sql = "INSERT INTO damaged_books (book_id, book_name, borrow_day, sunhuai, phone_number, user_id, user_name, yymmdd) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+                # 执行 SQL 查询
+                value = (bianhao, book_name, reulet[0], combobox, phonenumber, user_id, reulet[1], time)
+                self.cursor.execute(sql, value)
+                self.db.commit()
+                if self.db.commit:
+                    QMessageBox.warning(self, "提示", "录入成功!!!")
+                else:
+                    QMessageBox.warning(self, "提示", "归还失败!!!")
+        else:
+            QMessageBox.warning(self, "提示", "归还失败!!!")
 
         # 删除借阅表的内容
         sql = "DELETE FROM admin_borrow WHERE book_id = %s and user_id = %s"

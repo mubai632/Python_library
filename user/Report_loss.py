@@ -8,46 +8,46 @@ import time
 from mysql import OpenMySql
 
 
-class SearchThread1(QThread):
-    search_finished = pyqtSignal(object)  # 定义一个信号，在搜索完成时发射
-
-    def __init__(self, db, cursor):
-        super().__init__()
-        self.db = db
-        self.cursor = cursor
-
-    def run(self):
-        sql ="SELECT id FROM dl_user"
-        self.cursor.execute(sql)
-        result = self.cursor.fetchone()
-
-        # 查询数据库获取数据
-        query = "SELECT * FROM admin_borrow WHERE user_id = %s ORDER BY yymmdd DESC"
-        self.cursor.execute(query, (result[0],))
-        data1 = self.cursor.fetchall()
-        time.sleep(2)
-        self.search_finished.emit(data1)  # 发射信号，传递数据
-
-
-class SearchThread2(QThread):
-    search_finished = pyqtSignal(object)  # 定义一个信号，在搜索完成时发射
-
-    def __init__(self, db, cursor):
-        super().__init__()
-        self.db = db
-        self.cursor = cursor
-
-    def run(self):
-        sql ="SELECT id FROM dl_user"
-        self.cursor.execute(sql)
-        result = self.cursor.fetchone()
-        if result is not None:
-            # 查询数据库获取数据
-            query = "SELECT * FROM book_report_loss WHERE user_id = %s"
-            self.cursor.execute(query, (result[0],))
-            data2 = self.cursor.fetchall()
-            time.sleep(2)
-            self.search_finished.emit(data2)  # 发射信号，传递数据
+# class SearchThread1(QThread):
+#     search_finished = pyqtSignal(object)  # 定义一个信号，在搜索完成时发射
+#
+#     def __init__(self, db, cursor):
+#         super().__init__()
+#         self.db = db
+#         self.cursor = cursor
+#
+#     def run(self):
+#         sql ="SELECT id FROM dl_user"
+#         self.cursor.execute(sql)
+#         result = self.cursor.fetchone()
+#
+#         # 查询数据库获取数据
+#         query = "SELECT * FROM admin_borrow WHERE user_id = %s ORDER BY yymmdd DESC"
+#         self.cursor.execute(query, (result[0],))
+#         data1 = self.cursor.fetchall()
+#         time.sleep(2)
+#         self.search_finished.emit(data1)  # 发射信号，传递数据
+#
+#
+# class SearchThread2(QThread):
+#     search_finished = pyqtSignal(object)  # 定义一个信号，在搜索完成时发射
+#
+#     def __init__(self, db, cursor):
+#         super().__init__()
+#         self.db = db
+#         self.cursor = cursor
+#
+#     def run(self):
+#         sql ="SELECT id FROM dl_user"
+#         self.cursor.execute(sql)
+#         result = self.cursor.fetchone()
+#         if result is not None:
+#             # 查询数据库获取数据
+#             query = "SELECT * FROM book_report_loss WHERE user_id = %s"
+#             self.cursor.execute(query, (result[0],))
+#             data2 = self.cursor.fetchall()
+#             time.sleep(2)
+#             self.search_finished.emit(data2)  # 发射信号，传递数据
 
 
 class ReportLoss(QMainWindow):
@@ -117,10 +117,15 @@ class ReportLoss(QMainWindow):
         column_labels = ["书籍编号", "书名", "借阅期限", "用户id", "用户姓名", "手机号", "借阅时间", "挂失"]
         self.table_widget_1.setHorizontalHeaderLabels(column_labels)
 
-        # 创建并启动线程执行查询
-        self.search_thread_1 = SearchThread1(self.db, self.cursor)
-        self.search_thread_1.search_finished.connect(self.add_data_to_table_1)  # 连接信号到槽函数
-        self.search_thread_1.start()
+        sql = "SELECT id FROM dl_user"
+        self.cursor.execute(sql)
+        result = self.cursor.fetchone()
+
+        # 查询数据库获取数据
+        query = "SELECT * FROM admin_borrow WHERE user_id = %s ORDER BY yymmdd DESC"
+        self.cursor.execute(query, (result[0],))
+        data1 = self.cursor.fetchall()
+        self.add_data_to_table_1(data1)
 
     def sss2(self):
         layout2 = self.ui.scrollAreaWidgetContents_2.layout()
@@ -132,10 +137,15 @@ class ReportLoss(QMainWindow):
         column_labels = ["书籍编号", "书名", "用户id", "取消挂失"]
         self.table_widget_2.setHorizontalHeaderLabels(column_labels)
 
-        # 创建并启动线程执行查询
-        self.search_thread_2 = SearchThread2(self.db, self.cursor)
-        self.search_thread_2.search_finished.connect(self.add_data_to_table_2)  # 连接信号到槽函数
-        self.search_thread_2.start()
+        sql = "SELECT id FROM dl_user"
+        self.cursor.execute(sql)
+        result = self.cursor.fetchone()
+        if result is not None:
+            # 查询数据库获取数据
+            query = "SELECT * FROM book_report_loss WHERE user_id = %s"
+            self.cursor.execute(query, (result[0],))
+            data2 = self.cursor.fetchall()
+            self.add_data_to_table_2(data2)
 
     def add_data_to_table_1(self, data):
         # 如果数据为空，则直接返回，不执行后续操作

@@ -66,7 +66,7 @@ class UserLoginWindows(QMainWindow):
                                 sql = "SELECT neirong FROM gonggao"
                                 cursor.execute(sql)
                                 result = cursor.fetchone()
-                                QMessageBox.warning(self, '提示', result[0])
+                                QMessageBox.warning(self, '公告', result[0])
                                 # 关闭数据库和游标连接
                                 cursor.close()
                                 self.db.close()

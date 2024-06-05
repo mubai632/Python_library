@@ -14,10 +14,15 @@ class UserInfo(QMainWindow):
         self.ui.book_information.clicked.connect(self.OpenBookInformation)
         self.ui.reserve.clicked.connect(self.OpenReserve)
         self.ui.setting.clicked.connect(self.OpenSetting)
-        self.create_table_in_scroll1_area()
-        self.create_table_in_scroll2_area()
-        self.create_table_in_scroll3_area()
-        self.create_table_in_scroll4_area()
+        # self.create_table_in_scroll1_area()
+        # self.create_table_in_scroll2_area()
+        # self.create_table_in_scroll3_area()
+        # self.create_table_in_scroll4_area()
+
+        self.UserButton()
+        self.OverdueButton()
+        self.DamageButton()
+        self.LostBooksButton()
 
         self.ui.user_button.clicked.connect(self.UserButton)  # 用户管理搜索
         self.ui.overdue_button.clicked.connect(self.OverdueButton)  # 逾期用户搜索
@@ -56,22 +61,22 @@ class UserInfo(QMainWindow):
         self.ui.close()
 
     # 用户管理
-    def create_table_in_scroll1_area(self):
-        # 清除所有子部件
-        layout = self.ui.scrollAreaWidgetContents_4.layout()
-        while layout.count():
-            child = layout.takeAt(0)
-            if child.widget():
-                child.widget().deleteLater()
-
-        # 创建表格部件
-        self.table_widget = QTableWidget()
-        layout.addWidget(self.table_widget)  # 添加表格到布局中
-
-        # 设置表格的列数
-        self.table_widget.setColumnCount(5)  # 有8列
-        column_labels = ["学号/工号", "姓名", "email", "手机号", "专业"]
-        self.table_widget.setHorizontalHeaderLabels(column_labels)
+    # def create_table_in_scroll1_area(self):
+    #     # 清除所有子部件
+    #     layout = self.ui.scrollAreaWidgetContents_4.layout()
+    #     while layout.count():
+    #         child = layout.takeAt(0)
+    #         if child.widget():
+    #             child.widget().deleteLater()
+    #
+    #     # 创建表格部件
+    #     self.table_widget = QTableWidget()
+    #     layout.addWidget(self.table_widget)  # 添加表格到布局中
+    #
+    #     # 设置表格的列数
+    #     self.table_widget.setColumnCount(5)  # 有8列
+    #     column_labels = ["学号/工号", "姓名", "email", "手机号", "专业"]
+    #     self.table_widget.setHorizontalHeaderLabels(column_labels)
 
     def UserButton(self):
         db = OpenMySql.open_connection()
@@ -122,26 +127,25 @@ class UserInfo(QMainWindow):
                     self.table_widget.setItem(row_number, column_number, item)
 
     # 逾期用户
-    def create_table_in_scroll2_area(self):
-        # 清除所有子部件
-        layout = self.ui.scrollAreaWidgetContents.layout()
-        while layout.count():
-            child = layout.takeAt(0)
-            if child.widget():
-                child.widget().deleteLater()
-
-        # 创建表格部件
-        self.table_widget = QTableWidget()
-        layout.addWidget(self.table_widget)  # 添加表格到布局中
-
-        # 设置表格的列数
-        self.table_widget.setColumnCount(10)  # 有8列
-        column_labels = ["书名", "作者", "介绍", "第一大类", "第二大类", "图书编号", "收藏", "预约"]
-        self.table_widget.setHorizontalHeaderLabels(column_labels)
+    # def create_table_in_scroll2_area(self):
+    #     # 清除所有子部件
+    #     layout = self.ui.scrollAreaWidgetContents.layout()
+    #     while layout.count():
+    #         child = layout.takeAt(0)
+    #         if child.widget():
+    #             child.widget().deleteLater()
+    #
+    #     # 创建表格部件
+    #     self.table_widget = QTableWidget()
+    #     layout.addWidget(self.table_widget)  # 添加表格到布局中
+    #
+    #     # 设置表格的列数
+    #     self.table_widget.setColumnCount(10)  # 有8列
+    #     column_labels = ["书名", "作者", "介绍", "第一大类", "第二大类", "图书编号", "收藏", "预约"]
+    #     self.table_widget.setHorizontalHeaderLabels(column_labels)
 
     def OverdueButton(self):
         db = OpenMySql.open_connection()
-        print("132456")
         if db:
             try:
                 cursor = db.cursor()
@@ -187,22 +191,22 @@ class UserInfo(QMainWindow):
                     self.table_widget.setItem(row_number, column_number, item)
 
     # 书籍损坏
-    def create_table_in_scroll3_area(self):
-        # 清除所有子部件
-        layout = self.ui.scrollAreaWidgetContents_2.layout()
-        while layout.count():
-            child = layout.takeAt(0)
-            if child.widget():
-                child.widget().deleteLater()
-
-        # 创建表格部件
-        self.table_widget = QTableWidget()
-        layout.addWidget(self.table_widget)  # 添加表格到布局中
-
-        # 设置表格的列数
-        self.table_widget.setColumnCount(8)  # 有8列
-        column_labels = ["书籍id", "书名", "借阅天数", "是否损坏", "手机号", "学号\工号", "姓名", "时间"]
-        self.table_widget.setHorizontalHeaderLabels(column_labels)
+    # def create_table_in_scroll3_area(self):
+    #     # 清除所有子部件
+    #     layout = self.ui.scrollAreaWidgetContents_2.layout()
+    #     while layout.count():
+    #         child = layout.takeAt(0)
+    #         if child.widget():
+    #             child.widget().deleteLater()
+    #
+    #     # 创建表格部件
+    #     self.table_widget = QTableWidget()
+    #     layout.addWidget(self.table_widget)  # 添加表格到布局中
+    #
+    #     # 设置表格的列数
+    #     self.table_widget.setColumnCount(8)  # 有8列
+    #     column_labels = ["书籍id", "书名", "借阅天数", "是否损坏", "手机号", "学号\工号", "姓名", "时间"]
+    #     self.table_widget.setHorizontalHeaderLabels(column_labels)
 
     def DamageButton(self):
         db = OpenMySql.open_connection()
@@ -251,22 +255,22 @@ class UserInfo(QMainWindow):
                     self.table_widget.setItem(row_number, column_number, item)
 
     # 书籍挂失搜索
-    def create_table_in_scroll4_area(self):
-        # 清除所有子部件
-        layout = self.ui.scrollAreaWidgetContents_3.layout()
-        while layout.count():
-            child = layout.takeAt(0)
-            if child.widget():
-                child.widget().deleteLater()
-
-        # 创建表格部件
-        self.table_widget = QTableWidget()
-        layout.addWidget(self.table_widget)  # 添加表格到布局中
-
-        # 设置表格的列数
-        self.table_widget.setColumnCount(3)  # 有8列
-        column_labels = ["书籍id", "书名", "学号\工号"]
-        self.table_widget.setHorizontalHeaderLabels(column_labels)
+    # def create_table_in_scroll4_area(self):
+    #     # 清除所有子部件
+    #     layout = self.ui.scrollAreaWidgetContents_3.layout()
+    #     while layout.count():
+    #         child = layout.takeAt(0)
+    #         if child.widget():
+    #             child.widget().deleteLater()
+    #
+    #     # 创建表格部件
+    #     self.table_widget = QTableWidget()
+    #     layout.addWidget(self.table_widget)  # 添加表格到布局中
+    #
+    #     # 设置表格的列数
+    #     self.table_widget.setColumnCount(3)  # 有8列
+    #     column_labels = ["书籍id", "书名", "学号\工号"]
+    #     self.table_widget.setHorizontalHeaderLabels(column_labels)
 
     def LostBooksButton(self):
         db = OpenMySql.open_connection()

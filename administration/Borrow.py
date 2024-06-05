@@ -120,7 +120,7 @@ class Borrow(QMainWindow):
             self.db.commit()
             QMessageBox.warning(self, "提示", "录入成功!!!")
         else:
-            QMessageBox.warning(self, "提示", "本书30天内已借阅!!!")
+            QMessageBox.warning(self, "提示", "该书籍正在被该用户借阅中!!!")
 
 
         # 刷新表格界面

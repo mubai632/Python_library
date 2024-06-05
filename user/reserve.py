@@ -8,15 +8,16 @@ from mysql import OpenMySql
 class SearchThread(QThread):
     search_finished = pyqtSignal(object)  # 定义一个信号，在搜索完成时发射
 
-    def __init__(self, db, cursor):
+    def __init__(self, db, cursor, id):
         super().__init__()
+        self.id = id
         self.db = db
         self.cursor = cursor
 
     def run(self):
         # 查询数据库获取数据
-        query = "SELECT * FROM book_reserve_table"
-        self.cursor.execute(query)
+        query = "SELECT * FROM book_reserve_table WHERE id = %s"
+        self.cursor.execute(query, (self.id,))
         data = self.cursor.fetchall()
         self.search_finished.emit(data)  # 发射信号，传递数据
 
@@ -60,7 +61,7 @@ class reserve(QMainWindow):
                     self.table_widget.setHorizontalHeaderLabels(column_labels)
 
                     # 创建并启动线程执行查询
-                    self.search_thread = SearchThread(self.db, self.cursor)
+                    self.search_thread = SearchThread(self.db, self.cursor, dl_id)
                     self.search_thread.search_finished.connect(self.add_data_to_table)  # 连接信号到槽函数
                     self.search_thread.start()
             except Exception as e:
